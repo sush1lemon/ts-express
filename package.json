@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./app.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q app.js\""
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q app.js\"",
+    "generate-key": "node -e \"console.log(require('crypto').randomBytes(256).toString('base64'));\"\n\n"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
