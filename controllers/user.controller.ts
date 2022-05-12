@@ -5,6 +5,7 @@ import useragent from 'express-useragent';
 import bcrypt from 'bcrypt';
 import {isValidObjectId, Schema, Types} from "mongoose";
 import TodoModel from "../models/todo.model";
+import {SignUpUserRequest} from "../types/user";
 
 
 interface LoginRequest {
@@ -64,19 +65,41 @@ class UserController {
         res.json({access_token: accessToken, first_name: firstName, last_name: lastName})
     }
 
+    public SignUp = async (req: Request<{}, {}, SignUpUserRequest>, res: Response) => {
+        const user = req.body
+        const check = await UserModel.findOne({username: user.username}).exec()
+        if (check) return res.status(401).json({
+            message: 'Username is already taken.'
+        })
+
+        const created = await UserModel.create({
+            _id: new Types.ObjectId(),
+            username: user.username,
+            password: await bcrypt.hash(user.password, 12),
+            firstName: user.first_name,
+            lastName: user.last_name
+        })
+
+        return res.json(created)
+    }
+
     public Logout = async (req: Request, res: Response) => {
         const cookies = req.cookies;
         if (!cookies?.jwt) return res.sendStatus(204); //No content
         const refreshToken = cookies.jwt;
         const user = await UserModel.findOne({refreshToken: {$elemMatch: { token: refreshToken}}}).exec()
         if (!user) {
-            res.clearCookie('jwt');
+            res.setHeader('set-cookie', [
+                `jwt=${refreshToken}; SameSite=None; HttpOnly; Secure; Max-Age=0`
+            ])
             return res.sendStatus(204);
         }
 
         user.refreshToken?.filter(({token}) => token != refreshToken)
         const refreshed = await user.save();
-        res.clearCookie('jwt');
+        res.setHeader('set-cookie', [
+            `jwt=${refreshToken}; SameSite=None; HttpOnly; Secure; Max-Age=0`
+        ])
         return res.sendStatus(204);
     }
 

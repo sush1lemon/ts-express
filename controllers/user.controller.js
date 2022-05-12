@@ -56,6 +56,22 @@ class UserController {
             const { firstName, lastName } = user;
             res.json({ access_token: accessToken, first_name: firstName, last_name: lastName });
         });
+        this.SignUp = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const user = req.body;
+            const check = yield user_model_1.default.findOne({ username: user.username }).exec();
+            if (check)
+                return res.status(401).json({
+                    message: 'Username is already taken.'
+                });
+            const created = yield user_model_1.default.create({
+                _id: new mongoose_1.Types.ObjectId(),
+                username: user.username,
+                password: yield bcrypt_1.default.hash(user.password, 12),
+                firstName: user.first_name,
+                lastName: user.last_name
+            });
+            return res.json(created);
+        });
         this.Logout = (req, res) => __awaiter(this, void 0, void 0, function* () {
             var _f;
             const cookies = req.cookies;
@@ -64,12 +80,16 @@ class UserController {
             const refreshToken = cookies.jwt;
             const user = yield user_model_1.default.findOne({ refreshToken: { $elemMatch: { token: refreshToken } } }).exec();
             if (!user) {
-                res.clearCookie('jwt');
+                res.setHeader('set-cookie', [
+                    `jwt=${refreshToken}; SameSite=None; HttpOnly; Secure; Max-Age=0`
+                ]);
                 return res.sendStatus(204);
             }
             (_f = user.refreshToken) === null || _f === void 0 ? void 0 : _f.filter(({ token }) => token != refreshToken);
             const refreshed = yield user.save();
-            res.clearCookie('jwt');
+            res.setHeader('set-cookie', [
+                `jwt=${refreshToken}; SameSite=None; HttpOnly; Secure; Max-Age=0`
+            ]);
             return res.sendStatus(204);
         });
         this.GetUser = (req, res) => __awaiter(this, void 0, void 0, function* () {

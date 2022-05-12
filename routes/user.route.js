@@ -12,5 +12,6 @@ router.post('/login', controller.Login);
 router.get('/refresh', controller.VerifyRefreshToken);
 router.get('/todos', controller.GetUserTodos);
 router.get('/logout', controller.Logout);
+router.post('/sign-up', controller.SignUp);
 const userRouter = router;
 module.exports = userRouter;
