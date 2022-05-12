@@ -70,15 +70,13 @@ class UserController {
         const refreshToken = cookies.jwt;
         const user = await UserModel.findOne({refreshToken: {$elemMatch: { token: refreshToken}}}).exec()
         if (!user) {
-            res.clearCookie('jwt', { httpOnly: true, secure: true,
-                sameSite: "none", });
+            res.clearCookie('jwt', { httpOnly: true, secure: true });
             return res.sendStatus(204);
         }
 
         user.refreshToken?.filter(({token}) => token != refreshToken)
         const refreshed = await user.save();
-        res.clearCookie('jwt', { httpOnly: true,  secure: true,
-            sameSite: "none", });
+        res.clearCookie('jwt', { httpOnly: true,  secure: true });
         return res.sendStatus(204);
     }
 
