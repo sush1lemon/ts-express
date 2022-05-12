@@ -51,10 +51,9 @@ class UserController {
 
         res.cookie('jwt', refreshToken, {
             httpOnly: true,
-            secure: true,
             maxAge: 24 * 60 * 60 * 1000,
-            // @ts-ignore
-            SameSite: "none"
+            sameSite: "none",
+            secure: true,
         })
 
         const { firstName, lastName } = user;
