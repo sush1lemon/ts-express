@@ -9,7 +9,7 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
         process.env.ACCESS_TOKEN_SECRET || "notsosecret", (err, decoded) => {
             if (err) return res.sendStatus(403); //invalid token
             decoded = decoded as JwtPayload
-            req.user = decoded?.userInfo
+            req.user = decoded?.UserInfo
             next();
         })
 }

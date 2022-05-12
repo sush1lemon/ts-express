@@ -13,7 +13,7 @@ const authMiddleware = (req, res, next) => {
         if (err)
             return res.sendStatus(403); //invalid token
         decoded = decoded;
-        req.user = decoded === null || decoded === void 0 ? void 0 : decoded.userInfo;
+        req.user = decoded === null || decoded === void 0 ? void 0 : decoded.UserInfo;
         next();
     });
 };

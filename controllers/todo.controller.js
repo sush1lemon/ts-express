@@ -15,12 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const todo_model_1 = __importDefault(require("../models/todo.model"));
 const user_controller_1 = __importDefault(require("./user.controller"));
 const mongoose_1 = require("mongoose");
+const user_model_1 = __importDefault(require("../models/user.model"));
 const userController = new user_controller_1.default();
 class TodoController {
     constructor() {
         this.NewTodo = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const todo = req.body;
-            const user = yield userController.GetUserViaToken(req, res);
+            const user = yield user_model_1.default.findById(mongoose_1.Types.ObjectId.createFromHexString(req.user.id)).exec();
             todo._id = new mongoose_1.Types.ObjectId();
             todo.user_id = user === null || user === void 0 ? void 0 : user._id;
             const created = yield todo_model_1.default.create(todo);
@@ -38,7 +39,7 @@ class TodoController {
             const { id } = req.params;
             const data = req.body;
             if ((0, mongoose_1.isValidObjectId)(id)) {
-                const user = yield userController.GetUserViaToken(req, res);
+                const user = yield user_model_1.default.findById(mongoose_1.Types.ObjectId.createFromHexString(req.user.id)).exec();
                 data.user_id = user === null || user === void 0 ? void 0 : user._id;
                 const todo = yield todo_model_1.default.findOneAndUpdate({ _id: mongoose_1.Types.ObjectId.createFromHexString(id) }, data).exec();
                 return res.json(todo);
@@ -49,7 +50,7 @@ class TodoController {
             var _a;
             const { id } = req.params;
             if ((0, mongoose_1.isValidObjectId)(id)) {
-                const user = yield userController.GetUserViaToken(req, res);
+                const user = yield user_model_1.default.findById(mongoose_1.Types.ObjectId.createFromHexString(req.user.id)).exec();
                 const todo = yield todo_model_1.default.findById(mongoose_1.Types.ObjectId.createFromHexString(id)).exec();
                 if ((user === null || user === void 0 ? void 0 : user._id.toString()) == ((_a = todo === null || todo === void 0 ? void 0 : todo.user_id) === null || _a === void 0 ? void 0 : _a.toString())) {
                     yield (todo === null || todo === void 0 ? void 0 : todo.delete());
