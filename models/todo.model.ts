@@ -10,7 +10,7 @@ export interface ITodo extends Document{
 
 const TodoSchema: Schema = new Schema({
     _id: { type: Object, required: false },
-    user_id: { type: Object, required: true },
+    user_id: { type: Object, required: false },
     title: { type: String, required: true },
     content: { type: String, required: true },
     status: { type: Boolean, required: true },
