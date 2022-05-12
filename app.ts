@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import userRouter from "./routes/user.route";
 import connectDatabase from "./config/database";
 import mongoose from "mongoose";
-import credentials from "./middlewares/credentials";
+import credentialsMiddleware from "./middlewares/credentials.middleware";
 import corsOptions from "./config/corsOptions";
 import cookieParser from 'cookie-parser';
 import todoRouter from "./routes/todo.route";
@@ -17,7 +17,7 @@ const port = process.env.PORT || 4000;
 
 connectDatabase().then(() => console.log('Database connected'))
 
-app.use(credentials)
+app.use(credentialsMiddleware)
 app.use(cors(corsOptions)); /* NEW */
 app.use(express.urlencoded({ extended: false }));
 

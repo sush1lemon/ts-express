@@ -4,8 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 const express_1 = __importDefault(require("express"));
 const todo_controller_1 = __importDefault(require("../controllers/todo.controller"));
+const auth_middleware_1 = __importDefault(require("../middlewares/auth.middleware"));
 const router = express_1.default.Router();
 const controller = new todo_controller_1.default();
+router.use(auth_middleware_1.default);
 router.post('/', controller.NewTodo);
 router.get('/:id', controller.GetTodo);
 router.put('/:id', controller.UpdateTodo);

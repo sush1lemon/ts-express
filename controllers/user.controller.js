@@ -31,7 +31,7 @@ class UserController {
             if (!check) {
                 return res.status(401).json({ 'message': 'Invalid username or password' });
             }
-            const accessToken = this.SignAccessToken(user.username);
+            const accessToken = this.SignAccessToken(user);
             const refreshToken = jsonwebtoken_1.default.sign({ "username": user.username }, (_a = process.env.REFRESH_TOKEN_SECRET) !== null && _a !== void 0 ? _a : 'notsosecret', { expiresIn: '1d' });
             const ip = req.headers['x-forwarded-for'] ||
                 req.socket.remoteAddress ||
@@ -99,7 +99,7 @@ class UserController {
             jsonwebtoken_1.default.verify(refreshToken, (_g = process.env.REFRESH_TOKEN_SECRET) !== null && _g !== void 0 ? _g : 'notsosecret', (err, decoded) => {
                 if (err || decoded.username != user.username)
                     return res.sendStatus(403);
-                const accessToken = this.SignAccessToken(user.username);
+                const accessToken = this.SignAccessToken(user);
                 const { firstName, lastName } = user;
                 res.json({ access_token: accessToken, first_name: firstName, last_name: lastName });
             });
@@ -114,11 +114,12 @@ class UserController {
                 return null; //Forbidden
             return user;
         });
-        this.SignAccessToken = (username) => {
+        this.SignAccessToken = (user) => {
             var _a;
             return jsonwebtoken_1.default.sign({
                 "UserInfo": {
-                    "username": username,
+                    "username": user.username,
+                    "id": user._id,
                 }
             }, (_a = process.env.ACCESS_TOKEN_SECRET) !== null && _a !== void 0 ? _a : 'notsosecret', { expiresIn: '15m' });
         };

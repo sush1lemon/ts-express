@@ -26,7 +26,7 @@ class UserController {
             return res.status(401).json({'message': 'Invalid username or password'});
         }
 
-        const accessToken = this.SignAccessToken(user.username)
+        const accessToken = this.SignAccessToken(user)
 
         const refreshToken = jwt.sign(
             {"username": user.username},
@@ -109,7 +109,7 @@ class UserController {
             process.env.REFRESH_TOKEN_SECRET ?? 'notsosecret',
             (err: any, decoded: any) => {
                 if (err || decoded.username != user.username) return res.sendStatus(403);
-                const accessToken = this.SignAccessToken(user.username)
+                const accessToken = this.SignAccessToken(user)
                 const { firstName, lastName } = user;
                 res.json({access_token: accessToken, first_name: firstName, last_name: lastName})
             })
@@ -124,11 +124,12 @@ class UserController {
         return user;
     }
 
-    private SignAccessToken = (username: string) => {
+    private SignAccessToken = (user: IUser) => {
         return jwt.sign(
             {
                 "UserInfo": {
-                    "username": username,
+                    "username": user.username,
+                    "id": user._id,
                 }
             },
             process.env.ACCESS_TOKEN_SECRET ?? 'notsosecret',
