@@ -44,12 +44,15 @@ class UserController {
             };
             (_e = user.refreshToken) === null || _e === void 0 ? void 0 : _e.push(rfToken);
             yield user.save();
-            res.cookie('jwt', refreshToken, {
-                httpOnly: true,
-                maxAge: 24 * 60 * 60 * 1000,
-                sameSite: "none",
-                secure: true,
-            });
+            // res.cookie('jwt', refreshToken, {
+            //     httpOnly: true,
+            //     maxAge: 24 * 60 * 60 * 1000,
+            //     sameSite: "none",
+            //     secure: true,
+            // })
+            res.setHeader('set-cookie', [
+                `jwt=${refreshToken}; SameSite=None; HttpOnly; Secure; Max-Age=${24 * 60 * 60 * 1000}`
+            ]);
             const { firstName, lastName } = user;
             res.json({ access_token: accessToken, first_name: firstName, last_name: lastName });
         });

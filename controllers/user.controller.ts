@@ -49,12 +49,16 @@ class UserController {
         user.refreshToken?.push(rfToken)
         await user.save();
 
-        res.cookie('jwt', refreshToken, {
-            httpOnly: true,
-            maxAge: 24 * 60 * 60 * 1000,
-            sameSite: "none",
-            secure: true,
-        })
+        // res.cookie('jwt', refreshToken, {
+        //     httpOnly: true,
+        //     maxAge: 24 * 60 * 60 * 1000,
+        //     sameSite: "none",
+        //     secure: true,
+        // })
+
+        res.setHeader('set-cookie', [
+            `jwt=${refreshToken}; SameSite=None; HttpOnly; Secure; Max-Age=${24 * 60 * 60 * 1000}`
+        ])
 
         const { firstName, lastName } = user;
         res.json({access_token: accessToken, first_name: firstName, last_name: lastName})
