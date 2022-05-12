@@ -114,10 +114,7 @@ class UserController {
     }
 
     public GetUserTodos = async (req: Request, res: Response) => {
-        const user = await this.GetUserViaToken(req, res)
-        if (!user) return res.sendStatus(403); //Forbidden
-
-        const todos = await TodoModel.find({user_id: user._id}).exec()
+        const todos = await TodoModel.find({user_id: Types.ObjectId.createFromHexString(req.user.id)}).exec()
         return res.json(todos)
     }
 

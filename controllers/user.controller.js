@@ -101,10 +101,7 @@ class UserController {
             return res.json({ data: null });
         });
         this.GetUserTodos = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const user = yield this.GetUserViaToken(req, res);
-            if (!user)
-                return res.sendStatus(403); //Forbidden
-            const todos = yield todo_model_1.default.find({ user_id: user._id }).exec();
+            const todos = yield todo_model_1.default.find({ user_id: mongoose_1.Types.ObjectId.createFromHexString(req.user.id) }).exec();
             return res.json(todos);
         });
         this.VerifyRefreshToken = (req, res) => __awaiter(this, void 0, void 0, function* () {
