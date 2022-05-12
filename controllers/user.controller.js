@@ -64,12 +64,12 @@ class UserController {
             const refreshToken = cookies.jwt;
             const user = yield user_model_1.default.findOne({ refreshToken: { $elemMatch: { token: refreshToken } } }).exec();
             if (!user) {
-                res.clearCookie('jwt', { httpOnly: true, secure: true });
+                res.clearCookie('jwt');
                 return res.sendStatus(204);
             }
             (_f = user.refreshToken) === null || _f === void 0 ? void 0 : _f.filter(({ token }) => token != refreshToken);
             const refreshed = yield user.save();
-            res.clearCookie('jwt', { httpOnly: true, secure: true });
+            res.clearCookie('jwt');
             return res.sendStatus(204);
         });
         this.GetUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
