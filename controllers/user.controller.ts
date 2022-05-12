@@ -53,7 +53,7 @@ class UserController {
             httpOnly: true,
             secure: true,
             maxAge: 24 * 60 * 60 * 1000,
-            sameSite: "lax"
+            sameSite: false
         })
 
         const { firstName, lastName } = user;
@@ -67,14 +67,14 @@ class UserController {
         const user = await UserModel.findOne({refreshToken: {$elemMatch: { token: refreshToken}}}).exec()
         if (!user) {
             res.clearCookie('jwt', { httpOnly: true, secure: true,
-                sameSite: "lax" });
+                sameSite: false, });
             return res.sendStatus(204);
         }
 
         user.refreshToken?.filter(({token}) => token != refreshToken)
         const refreshed = await user.save();
         res.clearCookie('jwt', { httpOnly: true,  secure: true,
-            sameSite: "lax" });
+            sameSite: false, });
         return res.sendStatus(204);
     }
 
