@@ -1,13 +1,11 @@
-import express, { Express} from 'express';
+import express, {Express} from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import userRouter from "./routes/user.route";
 import connectDatabase from "./config/database";
 import mongoose from "mongoose";
 import credentialsMiddleware from "./middlewares/credentials.middleware";
 import corsOptions from "./config/corsOptions";
 import cookieParser from 'cookie-parser';
-import todoRouter from "./routes/todo.route";
 import router from "./routes";
 
 dotenv.config();
@@ -15,11 +13,17 @@ dotenv.config();
 const app: Express = express();
 const port = process.env.PORT || 4000;
 
+process.on('uncaughtException', function (err) {
+    console.error(err);
+    console.log("Node NOT Exiting...");
+});
+
+
 connectDatabase().then(() => console.log('Database connected'))
 
 app.use(credentialsMiddleware)
 app.use(cors(corsOptions)); /* NEW */
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 
 app.use(express.json());
 app.use(cookieParser())

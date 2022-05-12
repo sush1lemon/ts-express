@@ -1,10 +1,8 @@
 import {Request, Response} from "express";
 import TodoModel, {ITodo} from "../models/todo.model";
-import UserController from "./user.controller";
-import {isValidObjectId, Schema, Types} from "mongoose";
+import {isValidObjectId, Types} from "mongoose";
 import UserModel from "../models/user.model";
 
-const userController = new UserController()
 
 class TodoController {
 

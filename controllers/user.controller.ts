@@ -1,9 +1,8 @@
-import jwt, {JsonWebTokenError, JwtPayload, NotBeforeError, TokenExpiredError} from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import {Request, Response} from "express";
 import UserModel, {IUser, UserRefreshToken} from "../models/user.model";
-import useragent from 'express-useragent';
 import bcrypt from 'bcrypt';
-import {isValidObjectId, Schema, Types} from "mongoose";
+import {isValidObjectId, Types} from "mongoose";
 import TodoModel from "../models/todo.model";
 import {SignUpUserRequest} from "../types/user";
 

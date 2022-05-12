@@ -13,10 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const todo_model_1 = __importDefault(require("../models/todo.model"));
-const user_controller_1 = __importDefault(require("./user.controller"));
 const mongoose_1 = require("mongoose");
 const user_model_1 = __importDefault(require("../models/user.model"));
-const userController = new user_controller_1.default();
 class TodoController {
     constructor() {
         this.NewTodo = (req, res) => __awaiter(this, void 0, void 0, function* () {

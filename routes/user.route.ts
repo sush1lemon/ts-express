@@ -1,7 +1,8 @@
-import express, {Response} from "express";
-const router = express.Router();
+import express from "express";
 import UserController from '../controllers/user.controller'
 import authMiddleware from "../middlewares/auth.middleware";
+
+const router = express.Router();
 const controller = new UserController()
 
 /* GET users listing. */
