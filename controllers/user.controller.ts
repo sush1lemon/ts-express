@@ -94,7 +94,7 @@ class UserController {
             return res.sendStatus(204);
         }
 
-        user.refreshToken?.filter(({token}) => token != refreshToken)
+        user.refreshToken = user.refreshToken?.filter((rf) => rf.token != refreshToken)
         const refreshed = await user.save();
         res.setHeader('set-cookie', [
             `jwt=${refreshToken}; SameSite=None; HttpOnly; Secure; Max-Age=0`
@@ -110,6 +110,13 @@ class UserController {
         }
 
         return res.json({data: null})
+    }
+
+    public GetUsers = async (req: Request, res: Response) => {
+        const id = req.user.id;
+        const filter = id ? { $not: { _id: id}} : {};
+        const users = await UserModel.find(filter).exec()
+        return res.json(users);
     }
 
     public GetUserTodos = async (req: Request, res: Response) => {

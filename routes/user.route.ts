@@ -12,6 +12,7 @@ router.get('/refresh', controller.VerifyRefreshToken)
 router.get('/todos', authMiddleware, controller.GetUserTodos)
 router.get('/logout', controller.Logout)
 router.post('/sign-up', controller.SignUp)
+router.get('/', authMiddleware, controller.GetUsers)
 
 const userRouter = router;
 export = userRouter

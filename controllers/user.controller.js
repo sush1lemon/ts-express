@@ -85,7 +85,7 @@ class UserController {
                 ]);
                 return res.sendStatus(204);
             }
-            (_f = user.refreshToken) === null || _f === void 0 ? void 0 : _f.filter(({ token }) => token != refreshToken);
+            user.refreshToken = (_f = user.refreshToken) === null || _f === void 0 ? void 0 : _f.filter((rf) => rf.token != refreshToken);
             const refreshed = yield user.save();
             res.setHeader('set-cookie', [
                 `jwt=${refreshToken}; SameSite=None; HttpOnly; Secure; Max-Age=0`
@@ -99,6 +99,12 @@ class UserController {
                 return res.json(user);
             }
             return res.json({ data: null });
+        });
+        this.GetUsers = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const id = req.user.id;
+            const filter = id ? { $not: { _id: id } } : {};
+            const users = yield user_model_1.default.find(filter).exec();
+            return res.json(users);
         });
         this.GetUserTodos = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const todos = yield todo_model_1.default.find({ user_id: mongoose_1.Types.ObjectId.createFromHexString(req.user.id) }).exec();
