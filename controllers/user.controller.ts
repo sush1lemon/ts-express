@@ -75,8 +75,8 @@ class UserController {
             _id: new Types.ObjectId(),
             username: user.username,
             password: await bcrypt.hash(user.password, 12),
-            firstName: user.first_name,
-            lastName: user.last_name
+            firstName: user.firstName,
+            lastName: user.lastName
         })
 
         return res.json(created)
