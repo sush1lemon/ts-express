@@ -7,6 +7,7 @@ import credentialsMiddleware from "./middlewares/credentials.middleware";
 import corsOptions from "./config/corsOptions";
 import cookieParser from 'cookie-parser';
 import router from "./routes";
+import userAgent from 'express-useragent'
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ process.on('uncaughtException', function (err) {
 
 connectDatabase().then(() => console.log('Database connected'))
 
+app.use(userAgent.express());
 app.use(credentialsMiddleware)
 app.use(cors(corsOptions)); /* NEW */
 app.use(express.urlencoded({extended: false}));
