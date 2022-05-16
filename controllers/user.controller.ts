@@ -38,12 +38,16 @@ class UserController {
             req.socket.remoteAddress ||
             "Unknown";
 
-        const device = `${req.useragent?.os} ${req.useragent?.browser} ${req.useragent?.geoIp}`
+        const device = `${req.useragent?.os} ${req.useragent?.browser} ${req.useragent?.geoIp.toString()}`
 
         const rfToken: UserRefreshToken = {
             device: device,
             ip: ip,
-            token: refreshToken
+            token: refreshToken,
+            os: req.useragent?.os,
+            platform: req.useragent?.platform,
+            browser: req.useragent?.browser,
+            source: req.useragent?.source
         };
 
         user.refreshToken?.push(rfToken)

@@ -5,6 +5,10 @@ export interface UserRefreshToken {
     device?: string,
     ip?: string,
     last_used?: Date,
+    browser?: string,
+    os?: string,
+    platform?: string,
+    source?: string,
 }
 
 export interface IUser extends Document {
